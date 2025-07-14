@@ -42,6 +42,7 @@ const RootLayout = () => {
           navigationState={{ index, routes }}
           onIndexChange={setIndex}
           renderScene={renderScene}
+          compact
         />
       </SafeAreaProvider>
     </PaperProvider>

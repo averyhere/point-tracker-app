@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { View, TouchableWithoutFeedback } from "react-native";
-import { Text, Button, Card } from "react-native-paper";
+import { Text, Button, Card, Surface, Divider } from "react-native-paper";
 import { AddPlayerButton } from "@/components/add-player";
 import { ScoreControls } from "@/components/score-controls";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Timer } from "@/components/timer";
 import {
   useScoreStore,
   // type Player,
@@ -12,7 +13,6 @@ import { PlayerCard } from "@/components/player-card";
 
 export default function Index() {
   const { scoreboard, pointer, clearPointer } = useScoreStore();
-
   const handleClearSelection = () => {
     clearPointer();
   };
@@ -33,41 +33,56 @@ export default function Index() {
 
   return (
     <SafeAreaView>
-      <TouchableWithoutFeedback onPress={handleClearSelection}>
-        <View
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
-          {scoreboard.map((player, index) => (
-            <PlayerCard
-              isSelected={index === pointer}
-              key={player.name}
-              index={index}
-              player={player}
-            />
-          ))}
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={{}}>
+        <TouchableWithoutFeedback onPress={handleClearSelection}>
+          <View style={{ height: "100%" }}>
+            <View
+              style={{
+                width: "100%",
+                flexGrow: 1,
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+              }}
+            >
+              {scoreboard.map((player, index) => (
+                <PlayerCard
+                  key={player.id}
+                  player={player}
+                  index={index}
+                  isSelected={index === pointer}
+                />
+              ))}
+            </View>
 
-      <TouchableWithoutFeedback onPress={handleClearSelection}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <AddPlayerButton style={{ marginTop: 32 }}>
-            Add Player
-          </AddPlayerButton>
-        </View>
-      </TouchableWithoutFeedback>
+            <Surface
+              elevation={1}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 16,
+                marginInline: 16,
+                padding: 8,
+              }}
+            >
+              <Timer />
+              <Divider
+                style={{
+                  width: 1,
+                  height: 24,
+                  backgroundColor: "black",
+                }}
+              />
+              <AddPlayerButton mode="contained-tonal" elevation={0}>
+                Add Player
+              </AddPlayerButton>
+            </Surface>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     </SafeAreaView>
   );
 }

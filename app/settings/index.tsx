@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Appbar } from "react-native-paper";
 import { List } from "react-native-paper";
 import { useScoreStore } from "@/stores/scoreStore";
+import { colors } from "@/theme";
 
 export default function Index() {
   const { defaultPoints, setDefaultPoints, newGame, reset } = useScoreStore();
@@ -50,8 +51,10 @@ export default function Index() {
           justifyContent: "flex-start",
         }}
       >
-        <Icon source="cog-outline" size={92} />
-        <Text variant="displayLarge">Settings</Text>
+        <Icon source="cog-outline" color={colors.purple} size={92} />
+        <Text variant="displayLarge" style={{ color: colors.purple }}>
+          Settings
+        </Text>
       </View>
       <Divider style={{ marginBlock: 16 }} />
       <View

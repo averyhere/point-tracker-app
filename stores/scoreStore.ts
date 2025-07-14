@@ -19,8 +19,9 @@ export type ScoreState = {
   setPointer: (playerIndex: number) => void;
   clearPointer: () => void;
   tick: () => void;
-  pause: () => void;
-  resume: () => void;
+  pauseTimer: () => void;
+  resumeTimer: () => void;
+  resetTimer: () => void;
   newGame: () => void;
   reset: () => void;
   incrementPoints: (
@@ -36,6 +37,7 @@ export type ScoreState = {
   setGameStatus: (status: "idle" | "playing" | "complete") => void;
   defaultPoints: number;
   setDefaultPoints: (points: number) => void;
+  resetPlayerScore: (playerId: string) => void;
 };
 
 export const useScoreStore = create<ScoreState>()(
@@ -55,8 +57,9 @@ export const useScoreStore = create<ScoreState>()(
       clearPointer: () => set({ pointer: undefined }),
       tick: () =>
         set((state) => (state.isPaused ? state : { timer: state.timer + 1 })),
-      pause: () => set({ isPaused: true }),
-      resume: () => set({ isPaused: false }),
+      pauseTimer: () => set({ isPaused: true }),
+      resumeTimer: () => set({ isPaused: false }),
+      resetTimer: () => set({ isPaused: true, timer: 0 }),
       defaultPoints: 50,
       setDefaultPoints: (points) => set({ defaultPoints: points }),
       newGame: () => {
@@ -126,6 +129,17 @@ export const useScoreStore = create<ScoreState>()(
             scoreboard: updated,
             pointer: undefined,
           };
+        });
+      },
+      resetPlayerScore: (playerId: string) => {
+        set((state) => {
+          const playerIndex = state.scoreboard.findIndex(
+            (player) => player.id === playerId,
+          );
+          if (playerIndex === -1) return {};
+
+          state.scoreboard[playerIndex].points = state.defaultPoints;
+          return {};
         });
       },
       clearScores: () => {},

@@ -12,6 +12,9 @@ import {
   Divider,
 } from "react-native-paper";
 import { ScoreControls } from "./score-controls";
+import * as Haptics from "expo-haptics";
+import { colors } from "@/theme";
+import { useTheme } from "react-native-paper";
 
 export function PlayerCard({
   player,
@@ -22,14 +25,21 @@ export function PlayerCard({
   index: number;
   player: Player;
 }) {
-  const { removePlayer, pointer, setPointer, clearPointer, incrementPoints } =
-    useScoreStore();
+  const theme = useTheme();
+  const {
+    removePlayer,
+    pointer,
+    setPointer,
+    resetPlayerScore,
+    incrementPoints,
+  } = useScoreStore();
   const [showAddControls, setShowAddControls] = useState(false);
   const [showSubtractControls, setShowSubtractControls] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   const handlePlayerCardPress = () => {
     console.log("handlePlayerCardPress");
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPointer(index);
   };
 
@@ -50,7 +60,7 @@ export function PlayerCard({
           elevation: isSelected ? 4 : 0,
           borderWidth: 2,
           borderStyle: "solid",
-          borderColor: isSelected ? "#A41EF1" : "transparent",
+          borderColor: isSelected ? theme.colors.primary : "transparent",
         }}
         key={player.name}
         onPress={() => handlePlayerCardPress()}
@@ -60,12 +70,17 @@ export function PlayerCard({
           title={player.name}
           titleStyle={{
             textAlign: "center",
-            color: isSelected ? "#A41EF1" : "black",
+            color: theme.colors.primary,
           }}
           titleVariant="bodySmall"
         />
         <Card.Content>
-          <Text variant="displayLarge" style={{ textAlign: "center" }}>
+          <Text
+            variant="displayLarge"
+            style={{
+              textAlign: "center",
+            }}
+          >
             {player.points || 0}
           </Text>
         </Card.Content>
@@ -82,8 +97,14 @@ export function PlayerCard({
                 icon="minus"
                 size={16}
                 disabled={!isSelected}
-                onPress={() => incrementPoints(player.id, 1, "subtract")}
-                onLongPress={() => setShowSubtractControls(true)}
+                onPress={() => {
+                  incrementPoints(player.id, 1, "subtract");
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+                onLongPress={() => {
+                  setShowSubtractControls(true);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
               />
             }
           >
@@ -95,17 +116,26 @@ export function PlayerCard({
             </Text>
             <Divider />
             <Menu.Item
-              onPress={() => incrementPoints(player.id, 1, "subtract")}
+              onPress={() => {
+                incrementPoints(player.id, 1, "subtract");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               leadingIcon="minus"
               title="1 point"
             />
             <Menu.Item
-              onPress={() => incrementPoints(player.id, 5, "subtract")}
+              onPress={() => {
+                incrementPoints(player.id, 5, "subtract");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               leadingIcon="minus"
               title="5 points"
             />
             <Menu.Item
-              onPress={() => incrementPoints(player.id, 10, "subtract")}
+              onPress={() => {
+                incrementPoints(player.id, 10, "subtract");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               leadingIcon="minus"
               title="10 points"
             />
@@ -123,8 +153,14 @@ export function PlayerCard({
                 icon="plus"
                 size={16}
                 disabled={!isSelected}
-                onPress={() => incrementPoints(player.id, 1, "add")}
-                onLongPress={() => setShowAddControls(true)}
+                onPress={() => {
+                  incrementPoints(player.id, 1, "add");
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+                onLongPress={() => {
+                  setShowAddControls(true);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
               />
             }
           >
@@ -136,17 +172,26 @@ export function PlayerCard({
             </Text>
             <Divider />
             <Menu.Item
-              onPress={() => incrementPoints(player.id, 1, "add")}
+              onPress={() => {
+                incrementPoints(player.id, 1, "add");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               leadingIcon="plus"
               title="1 point"
             />
             <Menu.Item
-              onPress={() => incrementPoints(player.id, 5, "add")}
+              onPress={() => {
+                incrementPoints(player.id, 5, "add");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               leadingIcon="plus"
               title="5 points"
             />
             <Menu.Item
-              onPress={() => incrementPoints(player.id, 10, "add")}
+              onPress={() => {
+                incrementPoints(player.id, 10, "add");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
               leadingIcon="plus"
               title="10 points"
             />
@@ -164,12 +209,18 @@ export function PlayerCard({
                 icon="dots-horizontal"
                 size={16}
                 disabled={!isSelected}
-                onPress={() => setShowMenu(true)}
+                onPress={() => {
+                  setShowMenu(true);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
               />
             }
           >
-            <Menu.Item onPress={() => {}} leadingIcon="plus" title="Option 1" />
-            <Menu.Item onPress={() => {}} leadingIcon="plus" title="Option 2" />
+            <Menu.Item
+              onPress={() => resetPlayerScore(player.id)}
+              leadingIcon="refresh"
+              title="Reset"
+            />
             <Menu.Item
               onPress={() => removePlayer}
               leadingIcon="trash-can"
