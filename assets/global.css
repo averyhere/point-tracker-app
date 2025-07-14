@@ -1,0 +1,14 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+::root {
+    --color-white: #ffffff;
+    --color-black: #171717;
+    --color-pink: #f184d5;
+    --color-blue: #66c7f1;
+    --color-purple: #aca6e3;
+    --color-brightPurple: #a41ef1;
+}
