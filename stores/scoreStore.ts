@@ -38,8 +38,8 @@ export type ScoreState = {
   defaultPoints: number;
   setDefaultPoints: (points: number) => void;
   resetPlayerScore: (playerId: string) => void;
-  layout: "grid" | "list";
-  setLayout: (layout: "grid" | "list") => void;
+  layout: "grid" | "list" | "rotated";
+  setLayout: (layout: "grid" | "list" | "rotated") => void;
 };
 
 export const useScoreStore = create<ScoreState>()(
@@ -125,7 +125,7 @@ export const useScoreStore = create<ScoreState>()(
       removePlayer: () => {
         set((state) => {
           const updated = state.scoreboard!.filter(
-            (item, index) => index !== state.pointer,
+            (item) => item.id !== state.pointer,
           );
           return {
             scoreboard: updated,

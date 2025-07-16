@@ -1,30 +1,15 @@
 import { useState } from "react";
-import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
-import {
-  Text,
-  Button,
-  Card,
-  Surface,
-  Divider,
-  Portal,
-} from "react-native-paper";
+import { View, ScrollView } from "react-native";
 import { AddPlayerButton } from "@/components/add-player";
 import { Controls } from "@/components/score-controls";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Timer } from "@/components/timer";
 import { useHeaderHeight } from "@react-navigation/elements";
-import {
-  useScoreStore,
-  // type Player,
-} from "@/stores/scoreStore";
+import { useScoreStore } from "@/stores/scoreStore";
 import { PlayerCard } from "@/components/player-card";
 
 export default function Index() {
+  const [controlDrawerOpen, setControlDrawerOpen] = useState(false);
   const headerHeight = useHeaderHeight();
-  const { scoreboard, pointer, clearPointer, layout } = useScoreStore();
-  const handleClearSelection = () => {
-    clearPointer();
-  };
+  const { scoreboard, pointer, layout } = useScoreStore();
 
   if (!scoreboard.length) {
     return (
@@ -43,30 +28,32 @@ export default function Index() {
 
   return (
     <View>
-      <TouchableWithoutFeedback onPress={handleClearSelection}>
-        <ScrollView
-          style={{ height: "100%" }}
-          contentContainerStyle={{
-            width: "100%",
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: layout === "grid" ? "row" : "column",
-            flexWrap: "wrap",
-            alignItems: "center",
-            marginTop: headerHeight,
-            paddingBottom: 100,
-          }}
-        >
-          {scoreboard.map((player, index) => (
-            <PlayerCard
-              key={player.id}
-              player={player}
-              index={index}
-              isSelected={player.id === pointer}
-            />
-          ))}
-        </ScrollView>
-      </TouchableWithoutFeedback>
+      <ScrollView
+        style={{ height: "100%" }}
+        contentContainerStyle={{
+          width: "100%",
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: layout === "list" ? "column" : "row",
+          flexWrap: "wrap",
+          alignItems: "center",
+          marginTop: headerHeight,
+          paddingBottom: controlDrawerOpen ? 450 : 100,
+          paddingInline: 8,
+        }}
+      >
+        {scoreboard.map((player, index) => (
+          <PlayerCard
+            key={player.id}
+            player={player}
+            isSelected={player.id === pointer}
+            onLongPress={() => setControlDrawerOpen(true)}
+            setShowMenu={setControlDrawerOpen}
+            index={index}
+          />
+        ))}
+      </ScrollView>
+
       <View
         style={{
           position: "absolute",
@@ -79,7 +66,7 @@ export default function Index() {
       >
         <AddPlayerButton>Add Player</AddPlayerButton>
       </View>
-      <Controls />
+      <Controls visible={controlDrawerOpen} setVisible={setControlDrawerOpen} />
     </View>
   );
 }

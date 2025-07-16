@@ -1,12 +1,10 @@
 import * as React from "react";
 import { useState, useCallback } from "react";
 import {
-  Text,
   Button,
   TextInput,
   Dialog,
   Portal,
-  ModalProps,
   ButtonProps,
   DialogProps,
   HelperText,
@@ -16,7 +14,6 @@ import {
   // type Player,
 } from "@/stores/scoreStore";
 import { View } from "react-native";
-import { useTheme } from "react-native-paper";
 
 export function AddPlayerButton({ children, ...props }: ButtonProps) {
   const [visible, setVisible] = useState<boolean>(false);
@@ -57,7 +54,6 @@ export function AddPlayerDialog({
   const { addPlayer, scoreboard } = useScoreStore();
   const [playername, setPlayername] = useState("");
   const [error, setError] = useState("");
-  const theme = useTheme();
 
   const onDialogDismiss = useCallback(() => {
     // console.log("onDialogDismiss ~ playername:", playername);

@@ -1,180 +1,128 @@
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useScoreStore, type Player } from "@/stores/scoreStore";
 import { View } from "react-native";
-import {
-  Card,
-  Text,
-  Button,
-  IconButton,
-  Portal,
-  Menu,
-  Avatar,
-  Divider,
-} from "react-native-paper";
+import { Card, Text, IconButton, useTheme } from "react-native-paper";
 import * as Haptics from "expo-haptics";
-import { colors } from "@/theme";
-import { useTheme } from "react-native-paper";
 
 export function PlayerCard({
   player,
-  index,
   isSelected = false,
+  onLongPress,
+  setShowMenu,
+  index,
 }: {
   isSelected?: boolean;
-  index: number;
   player: Player;
+  onLongPress?: () => void;
+  setShowMenu?: (open: boolean) => void;
+  index?: number;
 }) {
   const theme = useTheme();
-  const {
-    removePlayer,
-    pointer,
-    clearPointer,
-    setPointer,
-    layout,
-    resetPlayerScore,
-    incrementPoints,
-  } = useScoreStore();
-  const [showAddControls, setShowAddControls] = useState(false);
-  const [showSubtractControls, setShowSubtractControls] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+
+  const { setPointer, layout } = useScoreStore();
+
   const playerCardRef = useRef(null);
 
   const handlePlayerCardPress = () => {
-    console.log("handlePlayerCardPress");
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPointer(player.id);
+    setShowMenu && setShowMenu(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handlePlayerCardLongPress = () => {
     setPointer(player.id);
-    setShowMenu(true);
+    setShowMenu && setShowMenu(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (onLongPress) onLongPress();
   };
 
-  const TheCard = () => (
-    <Card
-      mode="elevated"
-      elevation={1}
-      ref={playerCardRef}
-      style={{
-        width: "100%",
-        justifyContent: "center",
-        alignContent: "center",
-        alignItems: "center",
-        elevation: isSelected ? 4 : 0,
-        borderWidth: 2,
-        borderStyle: "solid",
-        borderColor: isSelected ? theme.colors.primary : "transparent",
-      }}
-      key={player.name}
-      onPress={() => handlePlayerCardPress()}
-      onLongPress={() => handlePlayerCardLongPress()}
-    >
-      <Card.Title
-        style={{
-          paddingTop: 16,
-          minHeight: 0,
-        }}
-        title={player.name}
-        titleStyle={{
-          textAlign: "center",
-          color: theme.colors.primary,
-          padding: 0,
-        }}
-        titleVariant="labelLarge"
-        right={() => (
-          <IconButton
-            icon="dots-horizontal"
-            size={16}
-            disabled={!isSelected}
-            style={{
-              position: "absolute",
-              bottom: -8,
-              right: 0,
-            }}
-            onPress={() => {
-              setShowMenu(true);
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          />
-        )}
-      />
-      <Card.Content>
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "space-around",
-            flexDirection: "row",
-          }}
-        >
-          <IconButton
-            mode="contained-tonal"
-            icon="minus"
-            size={layout === "grid" ? 21 : 32}
-            disabled={!isSelected}
-            onPress={() => {
-              incrementPoints(player.id, 1, "subtract");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          />
-          <Text
-            variant={layout === "grid" ? "displaySmall" : "displayLarge"}
-            style={{
-              textAlign: "center",
-            }}
-          >
-            {player.points || 0}
-          </Text>
-
-          <IconButton
-            mode="contained-tonal"
-            icon="plus"
-            size={layout === "grid" ? 21 : 32}
-            disabled={!isSelected}
-            onPress={() => {
-              incrementPoints(player.id, 1, "add");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-          />
-        </View>
-      </Card.Content>
-    </Card>
-  );
-
+  console.log("rotation:", index);
   return (
     <View
       style={{
-        width: layout === "grid" ? "50%" : "100%",
+        width: layout === "list" ? "100%" : "50%",
         height: "auto",
-        padding: 16,
+        padding: 8,
       }}
     >
-      <Menu
-        visible={showMenu}
-        onDismiss={() => {
-          clearPointer();
-          setShowMenu(false);
-        }}
+      <Card
         mode="elevated"
-        elevation={2}
-        anchor={<TheCard />}
-        contentStyle={{
-          top: -64,
-          left: "10%",
-          width: "90%",
+        elevation={1}
+        ref={playerCardRef}
+        style={{
+          width: "100%",
+          aspectRatio:
+            layout === "rotated" || layout === "grid" ? 1 : undefined,
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+          elevation: isSelected ? 4 : 0,
+          borderWidth: 2,
+          borderStyle: "solid",
+          borderColor: isSelected ? theme.colors.primary : "transparent",
+          transform:
+            layout === "rotated"
+              ? index && index % 2
+                ? "rotate(-90deg)"
+                : "rotate(90deg)"
+              : undefined,
         }}
+        key={player.name}
+        onPress={() => handlePlayerCardPress()}
+        onLongPress={() => handlePlayerCardLongPress()}
       >
-        <Menu.Item
-          onPress={() => resetPlayerScore(player.id)}
-          leadingIcon="refresh"
-          title="Reset"
+        <Card.Title
+          style={{
+            paddingTop: 16,
+            minHeight: 0,
+          }}
+          title={player.name}
+          titleStyle={{
+            textAlign: "center",
+            color: theme.colors.primary,
+            padding: 0,
+          }}
+          titleVariant="labelLarge"
+          right={() => (
+            <IconButton
+              icon="dots-horizontal"
+              size={16}
+              disabled={!isSelected}
+              style={{
+                opacity: isSelected ? 1 : 0,
+                position: "absolute",
+                bottom: -2,
+                right: 2,
+              }}
+              onPress={() => {
+                setShowMenu && setShowMenu(true);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+            />
+          )}
         />
-        <Menu.Item
-          onPress={() => removePlayer}
-          leadingIcon="trash-can"
-          title="Remove"
-        />
-      </Menu>
+        <Card.Content>
+          <View
+            style={{
+              width: "100%",
+              maxWidth: "100%",
+              justifyContent: "space-around",
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              variant={layout === "grid" ? "displaySmall" : "displayLarge"}
+              style={{
+                textAlign: "center",
+                fontSize: 54,
+                lineHeight: 54,
+              }}
+            >
+              {player.points || 0}
+            </Text>
+          </View>
+        </Card.Content>
+      </Card>
     </View>
   );
 }

@@ -2,19 +2,13 @@ import { useState } from "react";
 import { View, Keyboard } from "react-native";
 import {
   Text,
-  Drawer,
-  Button,
   Divider,
-  Icon,
   TextInput,
   IconButton,
   Snackbar,
   Portal,
   ToggleButton,
 } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Appbar } from "react-native-paper";
-import { List } from "react-native-paper";
 import { useScoreStore } from "@/stores/scoreStore";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { colors } from "@/theme";
@@ -23,19 +17,11 @@ export default function Index() {
   const headerHeight = useHeaderHeight();
   const { defaultPoints, setDefaultPoints, newGame, reset, layout, setLayout } =
     useScoreStore();
-  const [active, setActive] = useState("");
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [defaultPointsField, setDefaultPointsField] = useState(
     defaultPoints.toString(),
   );
-
-  const handleSetDefaultPoints = () => {
-    const newDefaultPoints = parseInt(defaultPointsField);
-    if (!isNaN(newDefaultPoints)) {
-      setDefaultPoints(newDefaultPoints);
-    }
-  };
 
   const handleUpdateDefaultPoints = () => {
     const newDefaultPoints = parseInt(defaultPointsField);
@@ -145,7 +131,7 @@ export default function Index() {
         <View>
           <ToggleButton.Row
             onValueChange={(value) => {
-              if (value === "grid" || value === "list") {
+              if (value === "grid" || value === "list" || value === "rotated") {
                 console.log("setting layout to", value);
                 setLayout(value);
                 setSnackbarMessage("Layout updated");
@@ -162,6 +148,11 @@ export default function Index() {
             <ToggleButton
               value="list"
               icon="view-list"
+              iconColor={colors.brightPurple}
+            />
+            <ToggleButton
+              value="rotated"
+              icon="arrow-split-vertical"
               iconColor={colors.brightPurple}
             />
           </ToggleButton.Row>
