@@ -9,18 +9,24 @@ import {
   ModalProps,
   ButtonProps,
   DialogProps,
+  HelperText,
 } from "react-native-paper";
 import {
   useScoreStore,
   // type Player,
 } from "@/stores/scoreStore";
 import { View } from "react-native";
+import { useTheme } from "react-native-paper";
 
 export function AddPlayerButton({ children, ...props }: ButtonProps) {
   const [visible, setVisible] = useState<boolean>(false);
 
   const handleDismiss = () => {
     setVisible(false);
+  };
+
+  const handleOpen = () => {
+    setVisible(true);
   };
 
   return (
@@ -32,7 +38,7 @@ export function AddPlayerButton({ children, ...props }: ButtonProps) {
       <Button
         mode="contained"
         icon="account-plus"
-        onPress={() => setVisible(true)}
+        onPress={() => handleOpen()}
         {...props}
       >
         {children}
@@ -48,15 +54,31 @@ export function AddPlayerDialog({
   style,
   ...props
 }: DialogProps) {
-  const { addPlayer } = useScoreStore();
+  const { addPlayer, scoreboard } = useScoreStore();
   const [playername, setPlayername] = useState("");
+  const [error, setError] = useState("");
+  const theme = useTheme();
 
   const onDialogDismiss = useCallback(() => {
-    console.log("onDialogDismiss ~ playername:", playername);
-    if (playername.trim().length > 0) addPlayer(playername.trim());
+    // console.log("onDialogDismiss ~ playername:", playername);
+    // if (playername.trim().length > 0) addPlayer(playername.trim());
 
     if (onDismiss) onDismiss();
-  }, [addPlayer, playername, onDismiss]);
+  }, [onDismiss]);
+
+  const handleAddPlayer = useCallback(() => {
+    console.log("handleAddPlayer", playername);
+    const cleanPlayerName = playername.trim();
+    const allPlayerNames = scoreboard.map((playername) => playername.name);
+    if (allPlayerNames.includes(cleanPlayerName)) {
+      setError("Player with that name already exists");
+      return;
+    } else {
+      setError("");
+    }
+    if (cleanPlayerName.length > 0) addPlayer(cleanPlayerName);
+    onDialogDismiss();
+  }, [playername, addPlayer, scoreboard, onDialogDismiss]);
 
   return (
     <React.Fragment>
@@ -75,16 +97,26 @@ export function AddPlayerDialog({
         >
           <Dialog.Title>Add a player</Dialog.Title>
           <Dialog.Content>
-            <TextInput
-              label="Player name"
-              maxLength={6}
-              onChangeText={(text) => setPlayername(text)}
-              autoFocus={true}
-            />
+            <View>
+              <TextInput
+                label="Player name"
+                maxLength={6}
+                onChangeText={(text) => setPlayername(text)}
+                autoFocus={true}
+                error={!!error}
+              />
+              <HelperText
+                style={{ position: "absolute", top: "95%", left: 0 }}
+                type="error"
+                visible={!!error}
+              >
+                {error}
+              </HelperText>
+            </View>
           </Dialog.Content>
           <Dialog.Actions>
             <View style={{ flexDirection: "row" }}>
-              <Button mode="contained" onPress={onDialogDismiss}>
+              <Button mode="contained" onPress={handleAddPlayer}>
                 Add
               </Button>
             </View>

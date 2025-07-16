@@ -1,14 +1,22 @@
 import * as React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "react-native";
-import { DarkTheme, LightTheme } from "@/theme";
-import { BottomNavigation, PaperProvider } from "react-native-paper";
+import { DarkTheme, LightTheme, colors } from "@/theme";
+import {
+  BottomNavigation,
+  PaperProvider,
+  IconButton,
+} from "react-native-paper";
+import { useRouter } from "expo-router";
 import "@/assets/global.css";
+import { Stack } from "expo-router";
 
 import HomeRoute from "./index";
 import SettingsRoute from "./settings";
 
 const RootLayout = () => {
+  const router = useRouter();
+
   // Handle scene routing
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -38,12 +46,35 @@ const RootLayout = () => {
   return (
     <PaperProvider theme={paperTheme}>
       <SafeAreaProvider>
-        <BottomNavigation
-          navigationState={{ index, routes }}
-          onIndexChange={setIndex}
-          renderScene={renderScene}
-          compact
-        />
+        <Stack
+          screenOptions={{
+            navigationBarColor: paperTheme.colors.background,
+            navigationBarHidden: false,
+            headerRight: () => (
+              <IconButton
+                onPress={() => router.navigate("/settings")}
+                icon="cog"
+              />
+            ),
+            headerBlurEffect: "regular",
+            headerTransparent: true,
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+            headerTintColor: paperTheme.colors.primary,
+            contentStyle: {
+              backgroundColor: paperTheme.colors.background,
+            },
+          }}
+        >
+          <Stack.Screen name="index" options={{ title: "Scoreboard" }} />
+          <Stack.Screen
+            name="settings/index"
+            options={{
+              title: "Settings",
+            }}
+          />
+        </Stack>
       </SafeAreaProvider>
     </PaperProvider>
   );

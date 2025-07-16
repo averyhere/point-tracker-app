@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useScoreStore, type Player } from "@/stores/scoreStore";
 import { View } from "react-native";
 import {
@@ -9,6 +9,7 @@ import {
   IconButton,
   Portal,
   Menu,
+  Avatar,
   Divider,
 } from "react-native-paper";
 import { ScoreControls } from "./score-controls";
@@ -29,13 +30,16 @@ export function PlayerCard({
   const {
     removePlayer,
     pointer,
+    clearPointer,
     setPointer,
+    layout,
     resetPlayerScore,
     incrementPoints,
   } = useScoreStore();
   const [showAddControls, setShowAddControls] = useState(false);
   const [showSubtractControls, setShowSubtractControls] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const playerCardRef = useRef(null);
 
   const handlePlayerCardPress = () => {
     console.log("handlePlayerCardPress");
@@ -43,59 +47,78 @@ export function PlayerCard({
     setPointer(index);
   };
 
-  // const handlePlayerCardLongPress = () => {
-  //   console.log("handlePlayerCardLongPress");
-  //   setPointer(index);
-  //   setShowControls(true);
-  // };
+  const handlePlayerCardLongPress = () => {
+    setPointer(index);
+    setShowMenu(true);
+  };
 
-  return (
-    <View style={{ width: "50%", height: "auto", padding: 16 }}>
-      <Card
-        mode="elevated"
-        elevation={1}
+  const TheCard = () => (
+    <Card
+      mode="elevated"
+      elevation={1}
+      ref={playerCardRef}
+      style={{
+        width: "100%",
+        justifyContent: "center",
+        alignContent: "center",
+        alignItems: "center",
+        elevation: isSelected ? 4 : 0,
+        borderWidth: 2,
+        borderStyle: "solid",
+        borderColor: isSelected ? theme.colors.primary : "transparent",
+      }}
+      key={player.name}
+      onPress={() => handlePlayerCardPress()}
+      onLongPress={() => handlePlayerCardLongPress()}
+    >
+      <Card.Title
         style={{
-          width: "100%",
-          justifyContent: "center",
-          elevation: isSelected ? 4 : 0,
-          borderWidth: 2,
-          borderStyle: "solid",
-          borderColor: isSelected ? theme.colors.primary : "transparent",
+          paddingTop: 16,
+          minHeight: 0,
         }}
-        key={player.name}
-        onPress={() => handlePlayerCardPress()}
-        // onLongPress={() => handlePlayerCardLongPress()}
-      >
-        <Card.Title
-          title={player.name}
-          titleStyle={{
-            textAlign: "center",
-            color: theme.colors.primary,
-          }}
-          titleVariant="bodySmall"
-        />
-        <Card.Content>
-          <Text
-            variant="displayLarge"
+        title={player.name}
+        titleStyle={{
+          textAlign: "center",
+          color: theme.colors.primary,
+          padding: 0,
+        }}
+        titleVariant="labelLarge"
+        right={() => (
+          <IconButton
+            icon="dots-horizontal"
+            size={16}
+            disabled={!isSelected}
             style={{
-              textAlign: "center",
+              position: "absolute",
+              bottom: -8,
+              right: 0,
             }}
-          >
-            {player.points || 0}
-          </Text>
-        </Card.Content>
-        <Card.Actions style={{ justifyContent: "center" }}>
+            onPress={() => {
+              setShowMenu(true);
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          />
+        )}
+      />
+      <Card.Content>
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "space-around",
+            flexDirection: "row",
+          }}
+        >
           <Menu
             visible={showSubtractControls}
             onDismiss={() => setShowSubtractControls(false)}
             mode="elevated"
             elevation={2}
-            contentStyle={{ borderRadius: 16 }}
+            contentStyle={{ borderRadius: 16, top: -32 }}
             anchor={
               <IconButton
                 mode="contained-tonal"
                 icon="minus"
-                size={16}
+                size={layout === "grid" ? 21 : 32}
                 disabled={!isSelected}
                 onPress={() => {
                   incrementPoints(player.id, 1, "subtract");
@@ -117,14 +140,6 @@ export function PlayerCard({
             <Divider />
             <Menu.Item
               onPress={() => {
-                incrementPoints(player.id, 1, "subtract");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="minus"
-              title="1 point"
-            />
-            <Menu.Item
-              onPress={() => {
                 incrementPoints(player.id, 5, "subtract");
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
@@ -139,19 +154,35 @@ export function PlayerCard({
               leadingIcon="minus"
               title="10 points"
             />
+            <Menu.Item
+              onPress={() => {
+                incrementPoints(player.id, 15, "subtract");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+              leadingIcon="minus"
+              title="15 points"
+            />
           </Menu>
+          <Text
+            variant={layout === "grid" ? "displaySmall" : "displayLarge"}
+            style={{
+              textAlign: "center",
+            }}
+          >
+            {player.points || 0}
+          </Text>
 
           <Menu
             visible={showAddControls}
             onDismiss={() => setShowAddControls(false)}
             mode="elevated"
             elevation={2}
-            contentStyle={{ borderRadius: 16 }}
+            contentStyle={{ borderRadius: 16, top: -32 }}
             anchor={
               <IconButton
                 mode="contained-tonal"
                 icon="plus"
-                size={16}
+                size={layout === "grid" ? 21 : 32}
                 disabled={!isSelected}
                 onPress={() => {
                   incrementPoints(player.id, 1, "add");
@@ -173,14 +204,6 @@ export function PlayerCard({
             <Divider />
             <Menu.Item
               onPress={() => {
-                incrementPoints(player.id, 1, "add");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="plus"
-              title="1 point"
-            />
-            <Menu.Item
-              onPress={() => {
                 incrementPoints(player.id, 5, "add");
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
@@ -195,43 +218,62 @@ export function PlayerCard({
               leadingIcon="plus"
               title="10 points"
             />
+            <Menu.Item
+              onPress={() => {
+                incrementPoints(player.id, 15, "add");
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
+              leadingIcon="plus"
+              title="15 points"
+            />
           </Menu>
+        </View>
+      </Card.Content>
+      {/* <Card.Actions
+        style={{
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "flex-end",
+          position: "relative",
+        }}
+      ></Card.Actions> */}
+    </Card>
+  );
 
-          <Menu
-            visible={showMenu}
-            onDismiss={() => setShowMenu(false)}
-            mode="elevated"
-            elevation={2}
-            contentStyle={{ borderRadius: 16 }}
-            anchor={
-              <IconButton
-                mode="contained-tonal"
-                icon="dots-horizontal"
-                size={16}
-                disabled={!isSelected}
-                onPress={() => {
-                  setShowMenu(true);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-              />
-            }
-          >
-            <Menu.Item
-              onPress={() => resetPlayerScore(player.id)}
-              leadingIcon="refresh"
-              title="Reset"
-            />
-            <Menu.Item
-              onPress={() => removePlayer}
-              leadingIcon="trash-can"
-              title="Remove"
-            />
-          </Menu>
-        </Card.Actions>
-      </Card>
-      {/* {showControls && (
-        <ScoreControls onDismiss={() => setShowControls(false)} />
-      )} */}
+  return (
+    <View
+      style={{
+        width: layout === "grid" ? "50%" : "100%",
+        height: "auto",
+        padding: 16,
+      }}
+    >
+      <Menu
+        visible={showMenu}
+        onDismiss={() => {
+          clearPointer();
+          setShowMenu(false);
+        }}
+        mode="elevated"
+        elevation={2}
+        anchor={<TheCard />}
+        contentStyle={{
+          top: -64,
+          left: "10%",
+          width: "90%",
+        }}
+      >
+        <Menu.Item
+          onPress={() => resetPlayerScore(player.id)}
+          leadingIcon="refresh"
+          title="Reset"
+        />
+        <Menu.Item
+          onPress={() => removePlayer}
+          leadingIcon="trash-can"
+          title="Remove"
+        />
+      </Menu>
     </View>
   );
 }

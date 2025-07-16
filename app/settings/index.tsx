@@ -10,15 +10,19 @@ import {
   IconButton,
   Snackbar,
   Portal,
+  ToggleButton,
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Appbar } from "react-native-paper";
 import { List } from "react-native-paper";
 import { useScoreStore } from "@/stores/scoreStore";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { colors } from "@/theme";
 
 export default function Index() {
-  const { defaultPoints, setDefaultPoints, newGame, reset } = useScoreStore();
+  const headerHeight = useHeaderHeight();
+  const { defaultPoints, setDefaultPoints, newGame, reset, layout, setLayout } =
+    useScoreStore();
   const [active, setActive] = useState("");
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -42,21 +46,12 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, height: "100%" }}>
-      <View
-        style={{
-          paddingInline: 16,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-        }}
-      >
-        <Icon source="cog-outline" color={colors.purple} size={92} />
-        <Text variant="displayLarge" style={{ color: colors.purple }}>
-          Settings
-        </Text>
-      </View>
-      <Divider style={{ marginBlock: 16 }} />
+    <View
+      style={{
+        marginBlockStart: headerHeight + 16,
+        marginBlockEnd: 16,
+      }}
+    >
       <View
         style={{
           flexDirection: "row",
@@ -131,17 +126,47 @@ export default function Index() {
           <Snackbar
             visible={showSnackbar}
             onDismiss={() => setShowSnackbar(false)}
-            action={{
-              label: "Undo",
-              onPress: () => {
-                // Do something
-              },
-            }}
           >
             {snackbarMessage}
           </Snackbar>
         </Portal>
       </View>
-    </SafeAreaView>
+
+      <Divider style={{ marginBlock: 16 }} />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingInline: 16,
+        }}
+      >
+        <Text>Layout</Text>
+        <View>
+          <ToggleButton.Row
+            onValueChange={(value) => {
+              if (value === "grid" || value === "list") {
+                console.log("setting layout to", value);
+                setLayout(value);
+                setSnackbarMessage("Layout updated");
+                setShowSnackbar(true);
+              }
+            }}
+            value={layout}
+          >
+            <ToggleButton
+              value="grid"
+              icon="view-grid"
+              iconColor={colors.brightPurple}
+            />
+            <ToggleButton
+              value="list"
+              icon="view-list"
+              iconColor={colors.brightPurple}
+            />
+          </ToggleButton.Row>
+        </View>
+      </View>
+    </View>
   );
 }

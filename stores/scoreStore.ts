@@ -38,6 +38,8 @@ export type ScoreState = {
   defaultPoints: number;
   setDefaultPoints: (points: number) => void;
   resetPlayerScore: (playerId: string) => void;
+  layout: "grid" | "list";
+  setLayout: (layout: "grid" | "list") => void;
 };
 
 export const useScoreStore = create<ScoreState>()(
@@ -146,6 +148,8 @@ export const useScoreStore = create<ScoreState>()(
       gameStatus: "idle",
       setGameStatus: (status: "idle" | "playing" | "complete") =>
         set({ gameStatus: status }),
+      layout: "grid",
+      setLayout: (layout: "grid" | "list") => set({ layout }),
     }),
     {
       name: "ahscore-game", // key in localStorage
