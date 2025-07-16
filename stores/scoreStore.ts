@@ -12,11 +12,11 @@ export type Player = {
 export type ScoreState = {
   players: number | undefined;
   scoreboard: Player[] | [];
-  pointer: number | undefined;
+  pointer: string | undefined;
   timer: number;
   isPaused: boolean;
   setBoard: (board: Player[]) => void;
-  setPointer: (playerIndex: number) => void;
+  setPointer: (playerId: string) => void;
   clearPointer: () => void;
   tick: () => void;
   pauseTimer: () => void;
@@ -29,8 +29,8 @@ export type ScoreState = {
     points: number,
     operation: "add" | "subtract",
   ) => void;
-
   addPlayer: (name: string) => void;
+  getPlayer: (id: string) => Player | undefined;
   removePlayer: () => void;
   clearScores: () => void;
   gameStatus: "idle" | "playing" | "complete" | undefined;
@@ -51,9 +51,9 @@ export const useScoreStore = create<ScoreState>()(
       timer: 0,
       isPaused: true,
       setBoard: (scoreboard) => set({ scoreboard }),
-      setPointer: (playerIndex) => {
+      setPointer: (playerId) => {
         set({
-          pointer: playerIndex,
+          pointer: playerId,
         });
       },
       clearPointer: () => set({ pointer: undefined }),
@@ -150,6 +150,8 @@ export const useScoreStore = create<ScoreState>()(
         set({ gameStatus: status }),
       layout: "grid",
       setLayout: (layout: "grid" | "list") => set({ layout }),
+      getPlayer: (id: string) =>
+        get().scoreboard.find((player) => player.id === id),
     }),
     {
       name: "ahscore-game", // key in localStorage

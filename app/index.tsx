@@ -9,7 +9,7 @@ import {
   Portal,
 } from "react-native-paper";
 import { AddPlayerButton } from "@/components/add-player";
-import { ScoreControls } from "@/components/score-controls";
+import { Controls } from "@/components/score-controls";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Timer } from "@/components/timer";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -62,7 +62,7 @@ export default function Index() {
               key={player.id}
               player={player}
               index={index}
-              isSelected={index === pointer}
+              isSelected={player.id === pointer}
             />
           ))}
         </ScrollView>
@@ -79,6 +79,7 @@ export default function Index() {
       >
         <AddPlayerButton>Add Player</AddPlayerButton>
       </View>
+      <Controls />
     </View>
   );
 }

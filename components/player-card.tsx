@@ -12,7 +12,6 @@ import {
   Avatar,
   Divider,
 } from "react-native-paper";
-import { ScoreControls } from "./score-controls";
 import * as Haptics from "expo-haptics";
 import { colors } from "@/theme";
 import { useTheme } from "react-native-paper";
@@ -44,11 +43,11 @@ export function PlayerCard({
   const handlePlayerCardPress = () => {
     console.log("handlePlayerCardPress");
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setPointer(index);
+    setPointer(player.id);
   };
 
   const handlePlayerCardLongPress = () => {
-    setPointer(index);
+    setPointer(player.id);
     setShowMenu(true);
   };
 
@@ -108,61 +107,16 @@ export function PlayerCard({
             flexDirection: "row",
           }}
         >
-          <Menu
-            visible={showSubtractControls}
-            onDismiss={() => setShowSubtractControls(false)}
-            mode="elevated"
-            elevation={2}
-            contentStyle={{ borderRadius: 16, top: -32 }}
-            anchor={
-              <IconButton
-                mode="contained-tonal"
-                icon="minus"
-                size={layout === "grid" ? 21 : 32}
-                disabled={!isSelected}
-                onPress={() => {
-                  incrementPoints(player.id, 1, "subtract");
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-                onLongPress={() => {
-                  setShowSubtractControls(true);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                }}
-              />
-            }
-          >
-            <Text
-              variant="titleMedium"
-              style={{ paddingInline: 16, paddingBlockEnd: 4 }}
-            >
-              Subtract Points
-            </Text>
-            <Divider />
-            <Menu.Item
-              onPress={() => {
-                incrementPoints(player.id, 5, "subtract");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="minus"
-              title="5 points"
-            />
-            <Menu.Item
-              onPress={() => {
-                incrementPoints(player.id, 10, "subtract");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="minus"
-              title="10 points"
-            />
-            <Menu.Item
-              onPress={() => {
-                incrementPoints(player.id, 15, "subtract");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="minus"
-              title="15 points"
-            />
-          </Menu>
+          <IconButton
+            mode="contained-tonal"
+            icon="minus"
+            size={layout === "grid" ? 21 : 32}
+            disabled={!isSelected}
+            onPress={() => {
+              incrementPoints(player.id, 1, "subtract");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          />
           <Text
             variant={layout === "grid" ? "displaySmall" : "displayLarge"}
             style={{
@@ -172,71 +126,18 @@ export function PlayerCard({
             {player.points || 0}
           </Text>
 
-          <Menu
-            visible={showAddControls}
-            onDismiss={() => setShowAddControls(false)}
-            mode="elevated"
-            elevation={2}
-            contentStyle={{ borderRadius: 16, top: -32 }}
-            anchor={
-              <IconButton
-                mode="contained-tonal"
-                icon="plus"
-                size={layout === "grid" ? 21 : 32}
-                disabled={!isSelected}
-                onPress={() => {
-                  incrementPoints(player.id, 1, "add");
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-                onLongPress={() => {
-                  setShowAddControls(true);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                }}
-              />
-            }
-          >
-            <Text
-              variant="titleMedium"
-              style={{ paddingInline: 16, paddingBlock: 4 }}
-            >
-              Add Points
-            </Text>
-            <Divider />
-            <Menu.Item
-              onPress={() => {
-                incrementPoints(player.id, 5, "add");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="plus"
-              title="5 points"
-            />
-            <Menu.Item
-              onPress={() => {
-                incrementPoints(player.id, 10, "add");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="plus"
-              title="10 points"
-            />
-            <Menu.Item
-              onPress={() => {
-                incrementPoints(player.id, 15, "add");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              leadingIcon="plus"
-              title="15 points"
-            />
-          </Menu>
+          <IconButton
+            mode="contained-tonal"
+            icon="plus"
+            size={layout === "grid" ? 21 : 32}
+            disabled={!isSelected}
+            onPress={() => {
+              incrementPoints(player.id, 1, "add");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+          />
         </View>
       </Card.Content>
-      {/* <Card.Actions
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "flex-end",
-          position: "relative",
-        }}
-      ></Card.Actions> */}
     </Card>
   );
 
