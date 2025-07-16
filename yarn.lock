@@ -1442,10 +1442,10 @@
   dependencies:
     "@radix-ui/react-compose-refs" "1.1.2"
 
-"@react-native-async-storage/async-storage@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-2.2.0.tgz"
-  integrity sha512-gvRvjR5JAaUZF8tv2Kcq/Gbt3JHwbKFYfmb445rhOj6NUMx3qPLixmDx5pZAyb9at1bYvJ4/eTUipU5aki45xw==
+"@react-native-async-storage/async-storage@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-2.1.2.tgz#8aae432adfc20800308e2ef3ce380864f0f9def8"
+  integrity sha512-dvlNq4AlGWC+ehtH12p65+17V0Dx7IecOWl6WanF2ja38O1Dcjjvn7jVzkUHJ5oWkQBlyASurTPlTHgKXyYiow==
   dependencies:
     merge-options "^3.0.4"
 
@@ -1793,9 +1793,9 @@
     use-latest-callback "^0.2.4"
     use-sync-external-store "^1.5.0"
 
-"@react-navigation/drawer@^7.5.3":
+"@react-navigation/drawer@^7.3.9":
   version "7.5.3"
-  resolved "https://registry.npmjs.org/@react-navigation/drawer/-/drawer-7.5.3.tgz"
+  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-7.5.3.tgz#90178bc57956695f50bb59478e9af14fccebbaff"
   integrity sha512-Jpfft6iHWL7G73nsc1n43g/ZpV/aRvj002AlX3xXyyMN+pB7USxt8J54srYomLO0EsTIhDDfazNL15o28+GQ6w==
   dependencies:
     "@react-navigation/elements" "^2.5.2"
@@ -6231,10 +6231,10 @@ react-native-reanimated@~3.17.4:
     invariant "^2.2.4"
     react-native-is-edge-to-edge "1.1.7"
 
-react-native-safe-area-context@^5.5.2:
-  version "5.5.2"
-  resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-5.5.2.tgz"
-  integrity sha512-t4YVbHa9uAGf+pHMabGrb0uHrD5ogAusSu842oikJ3YKXcYp6iB4PTGl0EZNkUIR3pCnw/CXKn42OCfhsS0JIw==
+react-native-safe-area-context@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.4.0.tgz#04b51940408c114f75628a12a93569d30c525454"
+  integrity sha512-JaEThVyJcLhA+vU0NU8bZ0a1ih6GiF4faZ+ArZLqpYbL6j7R3caRqj+mE3lEtKCuHgwjLg3bCxLL1GPUJZVqUA==
 
 react-native-screens@~4.11.1:
   version "4.11.1"
