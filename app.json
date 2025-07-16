@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "point-tracker",
-    "slug": "point-tracker",
+    "slug": "scoreboard-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.averyhere.pointtracker"
     },
     "web": {
       "bundler": "metro",
@@ -45,8 +46,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "b0302cff-c181-4b38-bda5-c0b3c09cf589"
+        "projectId": "51b4c393-98c0-4f7f-b22c-7e1ee561ce81"
       }
-    }
+    },
+    "owner": "averyh3r3"
   }
 }

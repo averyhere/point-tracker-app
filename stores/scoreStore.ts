@@ -149,7 +149,7 @@ export const useScoreStore = create<ScoreState>()(
       setGameStatus: (status: "idle" | "playing" | "complete") =>
         set({ gameStatus: status }),
       layout: "grid",
-      setLayout: (layout: "grid" | "list") => set({ layout }),
+      setLayout: (layout: "grid" | "list" | "rotated") => set({ layout }),
       getPlayer: (id: string) =>
         get().scoreboard.find((player) => player.id === id),
     }),
