@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, ScrollView } from "react-native";
+import { Text } from "react-native-paper";
 import { AddPlayerButton } from "@/components/add-player";
 import { Controls } from "@/components/score-controls";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -44,7 +45,7 @@ export default function Index() {
       >
         {scoreboard.map((player, index) => (
           <PlayerCard
-            key={player.id}
+            key={player.id || `player-${index}`}
             player={player}
             isSelected={player.id === pointer}
             onLongPress={() => setControlDrawerOpen(true)}

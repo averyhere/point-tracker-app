@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useScoreStore, type Player } from "@/stores/scoreStore";
 import { View } from "react-native";
 import { Card, Text, IconButton, useTheme } from "react-native-paper";
@@ -21,8 +21,6 @@ export function PlayerCard({
 
   const { setPointer, layout } = useScoreStore();
 
-  const playerCardRef = useRef(null);
-
   const handlePlayerCardPress = () => {
     setPointer(player.id);
     setShowMenu && setShowMenu(true);
@@ -36,6 +34,16 @@ export function PlayerCard({
     if (onLongPress) onLongPress();
   };
 
+  const getRotation = (index: number) => {
+    if (isNaN(index)) {
+      return undefined;
+    } else if (index % 2) {
+      return "rotate(-90deg)";
+    } else {
+      return "rotate(90deg)";
+    }
+  };
+
   return (
     <View
       style={{
@@ -47,11 +55,9 @@ export function PlayerCard({
       <Card
         mode="elevated"
         elevation={1}
-        ref={playerCardRef}
         style={{
           width: "100%",
-          aspectRatio:
-            layout === "rotated" || layout === "grid" ? 1 : undefined,
+          aspectRatio: layout === "grid" ? 1 : undefined,
           justifyContent: "center",
           alignContent: "center",
           alignItems: "center",
@@ -59,14 +65,7 @@ export function PlayerCard({
           borderWidth: 2,
           borderStyle: "solid",
           borderColor: isSelected ? theme.colors.primary : "transparent",
-          transform:
-            layout === "rotated"
-              ? index && index % 2
-                ? "rotate(-90deg)"
-                : "rotate(90deg)"
-              : undefined,
         }}
-        key={player.name}
         onPress={() => handlePlayerCardPress()}
         onLongPress={() => handlePlayerCardLongPress()}
       >

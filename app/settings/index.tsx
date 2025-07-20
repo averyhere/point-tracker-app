@@ -131,7 +131,7 @@ export default function Index() {
         <View>
           <ToggleButton.Row
             onValueChange={(value) => {
-              if (value === "grid" || value === "list" || value === "rotated") {
+              if (value === "grid" || value === "list") {
                 setLayout(value);
                 setSnackbarMessage("Layout updated");
                 setShowSnackbar(true);
@@ -147,11 +147,6 @@ export default function Index() {
             <ToggleButton
               value="list"
               icon="view-list"
-              iconColor={colors.brightPurple}
-            />
-            <ToggleButton
-              value="rotated"
-              icon="arrow-split-vertical"
               iconColor={colors.brightPurple}
             />
           </ToggleButton.Row>

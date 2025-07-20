@@ -38,8 +38,8 @@ export type ScoreState = {
   defaultPoints: number;
   setDefaultPoints: (points: number) => void;
   resetPlayerScore: (playerId: string) => void;
-  layout: "grid" | "list" | "rotated";
-  setLayout: (layout: "grid" | "list" | "rotated") => void;
+  layout: "grid" | "list";
+  setLayout: (layout: "grid" | "list") => void;
 };
 
 export const useScoreStore = create<ScoreState>()(
@@ -149,7 +149,7 @@ export const useScoreStore = create<ScoreState>()(
       setGameStatus: (status: "idle" | "playing" | "complete") =>
         set({ gameStatus: status }),
       layout: "grid",
-      setLayout: (layout: "grid" | "list" | "rotated") => set({ layout }),
+      setLayout: (layout: "grid" | "list") => set({ layout }),
       getPlayer: (id: string) =>
         get().scoreboard.find((player) => player.id === id),
     }),
