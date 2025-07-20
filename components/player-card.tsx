@@ -34,16 +34,6 @@ export function PlayerCard({
     if (onLongPress) onLongPress();
   };
 
-  const getRotation = (index: number) => {
-    if (isNaN(index)) {
-      return undefined;
-    } else if (index % 2) {
-      return "rotate(-90deg)";
-    } else {
-      return "rotate(90deg)";
-    }
-  };
-
   return (
     <View
       style={{
