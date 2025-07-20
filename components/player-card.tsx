@@ -36,7 +36,6 @@ export function PlayerCard({
     if (onLongPress) onLongPress();
   };
 
-  console.log("rotation:", index);
   return (
     <View
       style={{

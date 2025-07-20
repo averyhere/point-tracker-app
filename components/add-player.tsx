@@ -63,7 +63,6 @@ export function AddPlayerDialog({
   }, [onDismiss]);
 
   const handleAddPlayer = useCallback(() => {
-    console.log("handleAddPlayer", playername);
     const cleanPlayerName = playername.trim();
     const allPlayerNames = scoreboard.map((playername) => playername.name);
     if (allPlayerNames.includes(cleanPlayerName)) {

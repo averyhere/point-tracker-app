@@ -132,7 +132,6 @@ export default function Index() {
           <ToggleButton.Row
             onValueChange={(value) => {
               if (value === "grid" || value === "list" || value === "rotated") {
-                console.log("setting layout to", value);
                 setLayout(value);
                 setSnackbarMessage("Layout updated");
                 setShowSnackbar(true);
