@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "Point Tracker",
-    "slug": "point-tracker",
+    "name": "Simple Point Tracker",
+    "slug": "simple-point-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "pointtracker",
+    "scheme": "simplepointtracker",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.averyhere.pointtracker",
+      "bundleIdentifier": "com.averyhere.simplepointtracker",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -26,7 +26,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.averyhere.pointtracker"
+      "package": "com.averyhere.simplepointtracker"
     },
     "web": {
       "bundler": "metro",
